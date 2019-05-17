@@ -32,7 +32,8 @@ function x y =
 -- Sum Types
 -- Bool is a sum type False | True
 -- data Maybe a = Nothing | Just a
--- Maybe: never neither, never both
+-- Maybe: never neither, never bot
+-- data Either a b = Left a | Right b
 
 -- Product Types
 -- data (->) a b
@@ -53,6 +54,13 @@ data User2 = User2 { name :: Username
 -- *Main> :kind Maybe
 -- Maybe :: * -> *
 
+-- *Main> :set -XTypeApplications
+-- *Main> :type null
+-- null :: Foldable t => t a -> Bool
+-- *Main> :type null @[]
+-- null @[] :: [a] -> Bool
+-- the @ applys a type application
+
 safeHead :: [a] -> Maybe a
 safeHead xs = 
   case(xs) of
@@ -62,6 +70,39 @@ safeHead xs =
 isAnagram :: String -> String -> Bool
 isAnagram xs ys = sort(xs) == sort(ys)
 
+checkAnagram :: String -> String -> Bool
+checkAnagram xs ys =
+  case isWord xs of
+    Nothing -> False
+    Just xs -> 
+      case isWord ys of
+        Nothing -> False
+        Just ys -> isAnagram xs ys
+
+-- absolute x
+--   | x<0 = -x
+--   | otherwise = x
+
+-- isWord "" = Nothing
+-- isWord xs =
+--     case (all isAlpha xs) of
+--       False -> Nothing
+--       True -> Just xs
+
+isWord :: String -> Maybe String
+isWord xs =
+  case null xs of
+    True -> Nothing
+    False -> 
+      case (all isAlpha xs) of
+        False -> Nothing
+        True -> Just xs
+
 main :: IO ()
 main = do
-  putStrLn "hello world"
+  putStrLn "Please enter a word."
+  word1 <- getLine 
+  putStrLn "Please enter another word."
+  word2 <- getLine 
+  
+  print( checkAnagram word1 word2 ) 
