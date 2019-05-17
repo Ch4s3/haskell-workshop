@@ -61,6 +61,13 @@ data User2 = User2 { name :: Username
 -- null @[] :: [a] -> Bool
 -- the @ applys a type application
 
+-- *Main> :i (.)
+-- (.) :: (b -> c) -> (a -> b) -> a -> c 	-- Defined in ‘GHC.Base’
+-- infixr 9 .
+-- the (.) applies a to a->b and taks the b and applies it to b->c 
+-- *Main> (toUpper . head) "cats"
+-- 'C'
+
 safeHead :: [a] -> Maybe a
 safeHead xs = 
   case(xs) of
